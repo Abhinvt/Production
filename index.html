@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Input Form</title>
+    <style>
+        /* Same styles as above */
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        }
+        .container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        }
+        .form-group {
+        margin-bottom: 15px;
+        }
+        .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        }
+        .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        }
+        .form-group button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+        .form-group button:hover {
+        background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Data Input Form</h2>
+        <form id="dataForm">
+            <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+            <label for="workingHours">Working Hours</label>
+            <input type="number" id="workingHours" name="workingHours" required>
+            </div>
+            <div class="form-group">
+            <label for="startTime">Start Time</label>
+            <input type="time" id="startTime" name="startTime" required>
+            </div>
+            <div class="form-group">
+            <label for="endTime">End Time</label>
+            <input type="time" id="endTime" name="endTime" required>
+            </div>
+            <div class="form-group">
+            <label for="machineName">Machine Name</label>
+            <input type="text" id="machineName" name="machineName" required>
+            </div>
+            <div class="form-group">
+            <label for="partName">Part Name</label>
+            <input type="text" id="partName" name="partName" required>
+            </div>
+            <div class="form-group">
+            <label for="material">Material</label>
+            <input type="text" id="material" name="material" required>
+            </div>
+            <div class="form-group">
+            <label for="dimensions">Dimensions (L×W×H)</label>
+            <input type="text" id="dimensions" name="dimensions" placeholder="e.g., 10x5x2" required>
+            </div>
+            <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" name="quantity" required>
+            </div>
+            <div class="form-group">
+            <label for="downtime">Downtime (Minutes)</label>
+            <input type="number" id="downtime" name="downtime" required>
+            </div>
+            <div class="form-group">
+            <label for="machineModel">Machine Model</label>
+            <input type="text" id="machineModel" name="machineModel" required>
+            </div>
+            <div class="form-group">
+            <label for="remark">Remark</label>
+            <textarea id="remark" name="remark" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+            <button type="button" onclick="appendToExcel()">Save Data</button>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="saveData()">Save Data</button>
+            </div>
+        </form>
+        <div class="form-group">
+            <a href="http://localhost:3000/download" target="_blank">
+                <button type="button">Download Excel</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        async function saveData() {
+            const form = document.getElementById('dataForm');
+            const formData = new FormData(form);
+
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            const response = await fetch('http://localhost:3000/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+    </script>
+</body>
+</html>
